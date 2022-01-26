@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <h1>My Posts</h1>
+
+    <table class="table table-striped" id="body_data">
+        <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">User</th>
+            <th scope="col">Category</th>
+            <th scope="col">Change</th>
+            <th scope="col">Site</th>
+            <th scope="col">Date</th>
+            <th scope="col">Visibility</th>
+        </tr>
+        </thead>
+        <tbody >
+        {% for post in object_list %}
+            {% if user.id == post.author.id %}
+                <tr >
+                    <th scope="row"><a href="{% url 'article-detail' post.pk %}">{{post.title}}</a></th>
+                    <td>{{post.author}}</td>
+                    <td>{{post.category}}</td>
+                    <td id="{{post.site}}">{{post.site}}</td>
+                    <td>{{post.body|slice:":100"}}</td>
+                    <td>{{post.post_date |date:"Y-m-d"}}</td>
+                    <td>{{post.visibility}}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}  
+        </tbody>
+    </table>
+
+    
+{% else %}
+    <p>You are not permitted to view this page. Please <a href="{% url 'login' %}">login</a></p>
+{% endif %}
+    
+
+{% endblock %}
